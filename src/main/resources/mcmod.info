@@ -1,0 +1,20 @@
+{
+	"modListVersion": 2,
+	"modList": [{
+		"modid": "${modId}",
+		"name": "${modName}",
+		"description": "A seamless authentication mod that uses asymmetric encryption.",
+		"version": "${modVersion}",
+		"mcversion": "${minecraftVersion}",
+		"updateUrl": "",
+		"authorList": ["Anonymous"],
+		"credits": "",
+		"logoFile": "",
+		"screenshots": [],
+		"parent": "",
+		"requiredMods": [],
+		"dependencies": [],
+		"dependants": [],
+		"useDependencyInformation": true
+	}]
+}
