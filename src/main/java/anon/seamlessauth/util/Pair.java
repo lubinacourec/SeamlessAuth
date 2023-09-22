@@ -1,4 +1,4 @@
-package anon.seamlessauth;
+package anon.seamlessauth.util;
 
 public class Pair<T, K> {
     public T first;

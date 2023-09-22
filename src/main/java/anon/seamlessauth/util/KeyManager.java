@@ -1,4 +1,4 @@
-package anon.seamlessauth;
+package anon.seamlessauth.util;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,6 +17,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 
+import anon.seamlessauth.SeamlessAuth;
 import cpw.mods.fml.common.FMLCommonHandler;
 
 public class KeyManager {
@@ -26,7 +27,7 @@ public class KeyManager {
     private Cipher cipher;
 
     public KeyManager(String pubKeyPath, String prvKeyPath) {
-        SeamlessAuth.LOG.info("loading keys at [(" + pubKeyPath + "), (" + prvKeyPath + ")]");
+        SeamlessAuth.LOG.info("Loading keys at [(" + pubKeyPath + "), (" + prvKeyPath + ")]...");
         try {
             byte[] pubData = Files.readAllBytes(Paths.get(pubKeyPath));
             byte[] prvData = Files.readAllBytes(Paths.get(prvKeyPath));
@@ -38,9 +39,9 @@ public class KeyManager {
             pubKey = factory.generatePublic(pubSpec);
             prvKey = factory.generatePrivate(prvSpec);
 
-            SeamlessAuth.LOG.info("successfully loaded stored keys");
+            SeamlessAuth.LOG.info("Successfully loaded stored keys!");
         } catch (NoSuchFileException e) {
-            SeamlessAuth.LOG.info("no existing keys found, generating new pair");
+            SeamlessAuth.LOG.info("No existing keys found, generating new pair...");
 
             KeyPairGenerator kpg;
             try {

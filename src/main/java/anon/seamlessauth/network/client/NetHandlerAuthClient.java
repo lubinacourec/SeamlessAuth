@@ -31,7 +31,7 @@ public class NetHandlerAuthClient extends NetHandlerLoginClient implements INetH
         try {
             challenge = ClientProxy.keyManager.decrypt(encryptedChallenge);
         } catch (Exception e) {
-            e.printStackTrace();
+            SeamlessAuth.LOG.warn("failed to decrypt challenge", e);
             field_147393_d.closeChannel(new ChatComponentText("failed to decrypt challenge!"));
             return;
         }

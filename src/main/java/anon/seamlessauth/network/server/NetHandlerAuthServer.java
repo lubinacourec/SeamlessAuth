@@ -11,12 +11,12 @@ import com.google.common.base.Charsets;
 import com.mojang.authlib.GameProfile;
 
 import anon.seamlessauth.Config;
-import anon.seamlessauth.Pair;
 import anon.seamlessauth.SeamlessAuth;
 import anon.seamlessauth.ServerProxy;
 import anon.seamlessauth.network.packet.ChallengeRequest;
 import anon.seamlessauth.network.packet.ChallengeResponse;
 import anon.seamlessauth.network.packet.KeyResponse;
+import anon.seamlessauth.util.Pair;
 import cpw.mods.fml.common.FMLCommonHandler;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.network.NetworkManager;
