@@ -2,13 +2,13 @@ package anon.seamlessauth;
 
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
-public class ClientProxy extends CommonProxy {
-    public static KeyManager keyManager;
+public class ServerProxy extends CommonProxy {
+    public static KeyDatabase keyDatabase;
 
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
 
-        keyManager = new KeyManager(expandPath(Config.pubKeyPath), expandPath(Config.prvKeyPath));
+        keyDatabase = new KeyDatabase(expandPath(Config.databasePath));
     }
 }

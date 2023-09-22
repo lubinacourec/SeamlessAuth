@@ -11,10 +11,12 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import net.minecraft.network.EnumConnectionState;
 
 public class CommonProxy {
+    public String configDir;
 
     public void preInit(FMLPreInitializationEvent event) {
         SeamlessAuth.LOG.info(Tags.MODNAME + " (" + Tags.VERSION + ") loading...");
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
+        configDir = event.getModConfigurationDirectory().getAbsolutePath();
  
         /** packet registration **/
         /* server-side */
@@ -30,4 +32,10 @@ public class CommonProxy {
     public void postInit(FMLPostInitializationEvent event) {}
 
     public void serverStarting(FMLServerStartingEvent event) {}
+
+    public String expandPath(String original) {
+        String result = original;
+        if (result.startsWith("~")) result = result.replaceFirst("~", configDir);
+        return result;
+    }
 }

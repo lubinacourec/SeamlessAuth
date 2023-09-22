@@ -15,12 +15,9 @@ public class SeamlessAuth {
 
     public static final Logger LOG = LogManager.getLogger(Tags.MODID);
 
-    @SidedProxy(clientSide = "anon.seamlessauth.ClientProxy", serverSide = "anon.seamlessauth.CommonProxy")
+    @SidedProxy(clientSide = "anon.seamlessauth.ClientProxy", serverSide = "anon.seamlessauth.ServerProxy")
     public static CommonProxy proxy;
     
-    /* will only be initialised on the client side */
-    public static KeyManager keyManager;
-
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         proxy.preInit(event);

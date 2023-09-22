@@ -1,5 +1,6 @@
 package anon.seamlessauth.network.client;
 
+import anon.seamlessauth.ClientProxy;
 import anon.seamlessauth.SeamlessAuth;
 import anon.seamlessauth.network.packet.ChallengeRequest;
 import anon.seamlessauth.network.packet.ChallengeResponse;
@@ -19,7 +20,7 @@ public class NetHandlerAuthClient extends NetHandlerLoginClient implements INetH
 
     @Override
     public void handleKeyRequest(KeyRequest packetIn) {
-        field_147393_d.scheduleOutboundPacket(new KeyResponse(SeamlessAuth.keyManager.pubKey), new GenericFutureListener[0]);;
+        field_147393_d.scheduleOutboundPacket(new KeyResponse(ClientProxy.keyManager.pubKey), new GenericFutureListener[0]);;
     }
 
     @Override
@@ -28,7 +29,7 @@ public class NetHandlerAuthClient extends NetHandlerLoginClient implements INetH
         byte[] challenge;
 
         try {
-            challenge = SeamlessAuth.keyManager.decrypt(encryptedChallenge);
+            challenge = ClientProxy.keyManager.decrypt(encryptedChallenge);
         } catch (Exception e) {
             e.printStackTrace();
             field_147393_d.closeChannel(new ChatComponentText("failed to decrypt challenge!"));
