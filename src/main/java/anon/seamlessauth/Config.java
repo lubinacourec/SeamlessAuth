@@ -6,12 +6,18 @@ import net.minecraftforge.common.config.Configuration;
 
 public class Config {
 
-    public static String greeting = "Hello World";
+    public static String pubKeyPath;
+    public static String prvKeyPath;
+    
+    public static boolean implicitRegistration;
 
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
-
-        greeting = configuration.getString("greeting", Configuration.CATEGORY_GENERAL, greeting, "How shall I greet?");
+        
+        pubKeyPath = configuration.getString("publicKeyPath", "client", "~/authkey.pub", "Path to the public component of the keypair used for authentication. An initial ~ expands to the configuration directory.");
+        prvKeyPath = configuration.getString("privateKeyPath", "client", "~/authkey.prv", "Path to the private component of the keypair used for authentication. An initial ~ expands to the configuration directory.");
+        
+        implicitRegistration = configuration.getBoolean("implicitRegistration", "server", true, "Decides whether the server will accept and pin keys for usernames that aren't otherwise registered already. Disabling this will mean only keys that you specifically authorize will be able to join.");
 
         if (configuration.hasChanged()) {
             configuration.save();
