@@ -17,7 +17,7 @@ public class SeamlessAuth {
 
     @SidedProxy(clientSide = "anon.seamlessauth.ClientProxy", serverSide = "anon.seamlessauth.ServerProxy")
     public static CommonProxy proxy;
-    
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         proxy.preInit(event);

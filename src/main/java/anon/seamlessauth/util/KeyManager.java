@@ -21,6 +21,7 @@ import anon.seamlessauth.SeamlessAuth;
 import cpw.mods.fml.common.FMLCommonHandler;
 
 public class KeyManager {
+
     public PublicKey pubKey;
     public PrivateKey prvKey;
 
@@ -48,7 +49,8 @@ public class KeyManager {
                 kpg = KeyPairGenerator.getInstance("RSA");
             } catch (NoSuchAlgorithmException noSuchAlgorithmException) {
                 SeamlessAuth.LOG.fatal("failed to get RSA generator", noSuchAlgorithmException);
-                FMLCommonHandler.instance().exitJava(1, false);
+                FMLCommonHandler.instance()
+                    .exitJava(1, false);
                 return;
             }
 
@@ -57,25 +59,29 @@ public class KeyManager {
             KeyPair pair = kpg.generateKeyPair();
             pubKey = pair.getPublic();
             prvKey = pair.getPrivate();
-            
+
             try {
                 Files.write(Paths.get(pubKeyPath), pubKey.getEncoded());
                 Files.write(Paths.get(prvKeyPath), prvKey.getEncoded());
             } catch (IOException ioException) {
-                SeamlessAuth.LOG.fatal("failed to write keys, crashing to prevent usage of unrecoverable keys", ioException);
-                FMLCommonHandler.instance().exitJava(1, false);
+                SeamlessAuth.LOG
+                    .fatal("failed to write keys, crashing to prevent usage of unrecoverable keys", ioException);
+                FMLCommonHandler.instance()
+                    .exitJava(1, false);
             }
         } catch (Exception e) {
             SeamlessAuth.LOG.fatal("failed to load existing keys", e);
-            FMLCommonHandler.instance().exitJava(1, false);
+            FMLCommonHandler.instance()
+                .exitJava(1, false);
         }
-        
+
         try {
             cipher = Cipher.getInstance("RSA");
             cipher.init(Cipher.DECRYPT_MODE, prvKey);
         } catch (Exception e) {
             SeamlessAuth.LOG.fatal("failed to initialise RSA cipher", e);
-            FMLCommonHandler.instance().exitJava(1, false);
+            FMLCommonHandler.instance()
+                .exitJava(1, false);
         }
     }
 

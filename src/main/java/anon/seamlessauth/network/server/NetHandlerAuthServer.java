@@ -1,11 +1,15 @@
 package anon.seamlessauth.network.server;
 
-import java.util.Arrays;
-import java.util.UUID;
 import java.security.PublicKey;
 import java.security.SecureRandom;
+import java.util.Arrays;
+import java.util.UUID;
 
 import javax.crypto.Cipher;
+
+import net.minecraft.network.NetworkManager;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.NetHandlerLoginServer;
 
 import com.google.common.base.Charsets;
 import com.mojang.authlib.GameProfile;
@@ -19,13 +23,11 @@ import anon.seamlessauth.network.packet.KeyResponse;
 import anon.seamlessauth.util.Pair;
 import cpw.mods.fml.common.FMLCommonHandler;
 import io.netty.util.concurrent.GenericFutureListener;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.NetHandlerLoginServer;
 
 public class NetHandlerAuthServer extends NetHandlerLoginServer implements INetHandlerAuthServer {
+
     private static final SecureRandom challengeGenerator = new SecureRandom();
-    
+
     private byte[] challenge = new byte[64];
     private Cipher cipher;
 
@@ -37,7 +39,8 @@ public class NetHandlerAuthServer extends NetHandlerLoginServer implements INetH
             cipher = Cipher.getInstance("RSA");
         } catch (Exception e) {
             SeamlessAuth.LOG.fatal("failed to get RSA cipher", e);
-            FMLCommonHandler.instance().exitJava(1, false);
+            FMLCommonHandler.instance()
+                .exitJava(1, false);
         }
     }
 
@@ -48,8 +51,7 @@ public class NetHandlerAuthServer extends NetHandlerLoginServer implements INetH
         UUID uuid;
         if (user == null)
             uuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + original.getName()).getBytes(Charsets.UTF_8));
-        else
-            uuid = user.first;
+        else uuid = user.first;
 
         return new GameProfile(uuid, original.getName());
     }

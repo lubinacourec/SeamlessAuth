@@ -2,19 +2,21 @@ package anon.seamlessauth.network.packet;
 
 import java.io.IOException;
 
-import anon.seamlessauth.network.client.INetHandlerAuthClient;
 import net.minecraft.client.network.NetHandlerLoginClient;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
 
+import anon.seamlessauth.network.client.INetHandlerAuthClient;
+
 public class KeyRequest extends Packet {
-    @Override
-    public void readPacketData(PacketBuffer data) throws IOException { }
 
     @Override
-    public void writePacketData(PacketBuffer data) throws IOException { }
-    
+    public void readPacketData(PacketBuffer data) throws IOException {}
+
+    @Override
+    public void writePacketData(PacketBuffer data) throws IOException {}
+
     @Override
     public void processPacket(INetHandler handler) {
         /* here we need to switch the client onto our own code path */
@@ -22,8 +24,8 @@ public class KeyRequest extends Packet {
         handler.onConnectionStateTransition(null, null);
 
         /* mixin has run, get the new handler and call it */
-        NetHandlerLoginClient realHandler = (NetHandlerLoginClient)handler;
-        INetHandlerAuthClient newHandler = (INetHandlerAuthClient)realHandler.field_147393_d.getNetHandler();
+        NetHandlerLoginClient realHandler = (NetHandlerLoginClient) handler;
+        INetHandlerAuthClient newHandler = (INetHandlerAuthClient) realHandler.field_147393_d.getNetHandler();
         newHandler.handleKeyRequest(this);
     }
 

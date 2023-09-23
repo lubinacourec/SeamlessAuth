@@ -22,11 +22,12 @@ import anon.seamlessauth.SeamlessAuth;
 import cpw.mods.fml.common.FMLCommonHandler;
 
 public class KeyDatabase {
+
     /* username -> (uuid, key) */
     public Map<String, Pair<UUID, PublicKey>> authorized = new HashMap<String, Pair<UUID, PublicKey>>();
-    
+
     public String path;
-    
+
     public KeyDatabase(String databasePath) {
         path = databasePath;
 
@@ -35,7 +36,8 @@ public class KeyDatabase {
             kf = KeyFactory.getInstance("RSA");
         } catch (NoSuchAlgorithmException e) {
             SeamlessAuth.LOG.fatal("failed to get KeyFactory instance for RSA", e);
-            FMLCommonHandler.instance().exitJava(1, false);
+            FMLCommonHandler.instance()
+                .exitJava(1, false);
             return;
         }
 
@@ -48,9 +50,10 @@ public class KeyDatabase {
                     SeamlessAuth.LOG.warn("invalid entry in key database");
                     continue;
                 }
-                
+
                 UUID uuid = UUID.fromString(components[1]);
-                byte[] decoded = Base64.getDecoder().decode(components[2]);
+                byte[] decoded = Base64.getDecoder()
+                    .decode(components[2]);
                 PublicKey key;
                 try {
                     key = kf.generatePublic(new X509EncodedKeySpec(decoded));
@@ -65,17 +68,24 @@ public class KeyDatabase {
             SeamlessAuth.LOG.info("no existing key database found");
         } catch (IOException e) {
             SeamlessAuth.LOG.fatal("failed to read key database", e);
-            FMLCommonHandler.instance().exitJava(1, false);
+            FMLCommonHandler.instance()
+                .exitJava(1, false);
         }
     }
-    
+
     public void addUser(String username, UUID uuid, PublicKey key) {
         authorized.put(username, new Pair<UUID, PublicKey>(uuid, key));
 
-        String encoded = Base64.getEncoder().encodeToString(key.getEncoded());
+        String encoded = Base64.getEncoder()
+            .encodeToString(key.getEncoded());
         try {
-            Files.write(Paths.get(path), String.format("%s %s %s\n", username, uuid.toString(), encoded).getBytes(Charsets.UTF_8),
-                        StandardOpenOption.APPEND, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+            Files.write(
+                Paths.get(path),
+                String.format("%s %s %s\n", username, uuid.toString(), encoded)
+                    .getBytes(Charsets.UTF_8),
+                StandardOpenOption.APPEND,
+                StandardOpenOption.CREATE,
+                StandardOpenOption.WRITE);
         } catch (IOException e) {
             SeamlessAuth.LOG.warn("failed to write to key database", e);
         }

@@ -2,15 +2,18 @@ package anon.seamlessauth.network.packet;
 
 import java.io.IOException;
 
-import anon.seamlessauth.network.server.INetHandlerAuthServer;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
 
+import anon.seamlessauth.network.server.INetHandlerAuthServer;
+
 public class ChallengeResponse extends Packet {
+
     public byte[] payload;
 
     public ChallengeResponse() {}
+
     public ChallengeResponse(byte[] data) {
         payload = data;
     }
@@ -24,16 +27,16 @@ public class ChallengeResponse extends Packet {
     public void writePacketData(PacketBuffer data) throws IOException {
         writeBlob(data, payload);
     }
-    
+
     public void processPacket(INetHandlerAuthServer handler) {
         handler.handleChallengeResponse(this);
     }
 
     @Override
     public void processPacket(INetHandler handler) {
-        this.processPacket((INetHandlerAuthServer)handler);
+        this.processPacket((INetHandlerAuthServer) handler);
     }
-    
+
     @Override
     public boolean hasPriority() {
         return true;

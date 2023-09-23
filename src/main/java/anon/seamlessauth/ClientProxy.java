@@ -4,6 +4,7 @@ import anon.seamlessauth.util.KeyManager;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class ClientProxy extends CommonProxy {
+
     public static KeyManager keyManager;
 
     @Override

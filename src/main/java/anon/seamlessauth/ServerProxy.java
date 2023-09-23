@@ -4,6 +4,7 @@ import anon.seamlessauth.util.KeyDatabase;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class ServerProxy extends CommonProxy {
+
     public static KeyDatabase keyDatabase;
 
     @Override

@@ -2,15 +2,18 @@ package anon.seamlessauth.network.packet;
 
 import java.io.IOException;
 
-import anon.seamlessauth.network.client.INetHandlerAuthClient;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
 
+import anon.seamlessauth.network.client.INetHandlerAuthClient;
+
 public class ChallengeRequest extends Packet {
+
     public byte[] payload;
 
     public ChallengeRequest() {}
+
     public ChallengeRequest(byte[] data) {
         payload = data;
     }
@@ -31,7 +34,7 @@ public class ChallengeRequest extends Packet {
 
     @Override
     public void processPacket(INetHandler handler) {
-        this.processPacket((INetHandlerAuthClient)handler);
+        this.processPacket((INetHandlerAuthClient) handler);
     }
 
     @Override
