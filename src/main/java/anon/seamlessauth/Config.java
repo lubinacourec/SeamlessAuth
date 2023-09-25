@@ -18,19 +18,19 @@ public class Config {
         pubKeyPath = configuration.getString(
             "publicKeyPath",
             "client",
-            "~/authkey.pub",
-            "Path to the public component of the keypair used for authentication. An initial ~ expands to the configuration directory.");
+            "authkey.pub",
+            "Path to the public component of the keypair used for authentication. An initial ~ expands to the current user's home directory.");
         prvKeyPath = configuration.getString(
             "privateKeyPath",
             "client",
-            "~/authkey.prv",
-            "Path to the private component of the keypair used for authentication. An initial ~ expands to the configuration directory.");
+            "authkey.prv",
+            "Path to the private component of the keypair used for authentication. An initial ~ expands to the current user's home directory.");
 
         databasePath = configuration.getString(
             "databasePath",
             "server",
-            "~/authorized_users",
-            "Path to the file containing the pinned keys of registered users. An initial ~ expands to the configuration directory.");
+            "authorized_users",
+            "Path to the file containing the pinned keys of registered users. An initial ~ expands to the current user's home directory.");
         implicitRegistration = configuration.getBoolean(
             "implicitRegistration",
             "server",

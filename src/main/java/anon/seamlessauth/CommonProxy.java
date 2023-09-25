@@ -13,13 +13,9 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
 public class CommonProxy {
 
-    public String configDir;
-
     public void preInit(FMLPreInitializationEvent event) {
         SeamlessAuth.LOG.info(Tags.MODNAME + " (" + Tags.VERSION + ") loading...");
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
-        configDir = event.getModConfigurationDirectory()
-            .getAbsolutePath();
 
         /** packet registration **/
         /* server-side */
@@ -38,7 +34,7 @@ public class CommonProxy {
 
     public String expandPath(String original) {
         String result = original;
-        if (result.startsWith("~")) result = result.replaceFirst("~", configDir);
+        if (result.startsWith("~/")) result = result.replaceFirst("~", System.getProperty("user.home"));
         return result;
     }
 }
