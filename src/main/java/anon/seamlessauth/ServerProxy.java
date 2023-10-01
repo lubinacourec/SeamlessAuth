@@ -1,6 +1,6 @@
 package anon.seamlessauth;
 
-import anon.seamlessauth.util.KeyDatabase;
+import anon.seamlessauth.auth.KeyDatabase;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class ServerProxy extends CommonProxy {
@@ -11,6 +11,6 @@ public class ServerProxy extends CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
 
-        keyDatabase = new KeyDatabase(expandPath(Config.databasePath));
+        keyDatabase = new KeyDatabase(Config.expandPath(Config.databasePath));
     }
 }

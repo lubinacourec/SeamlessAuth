@@ -1,4 +1,4 @@
-package anon.seamlessauth.network.server;
+package anon.seamlessauth.auth.network.server;
 
 import java.security.PublicKey;
 import java.security.SecureRandom;
@@ -17,9 +17,9 @@ import com.mojang.authlib.GameProfile;
 import anon.seamlessauth.Config;
 import anon.seamlessauth.SeamlessAuth;
 import anon.seamlessauth.ServerProxy;
-import anon.seamlessauth.network.packet.ChallengeRequest;
-import anon.seamlessauth.network.packet.ChallengeResponse;
-import anon.seamlessauth.network.packet.KeyResponse;
+import anon.seamlessauth.auth.network.packet.ChallengeRequest;
+import anon.seamlessauth.auth.network.packet.ChallengeResponse;
+import anon.seamlessauth.auth.network.packet.KeyResponse;
 import anon.seamlessauth.util.Pair;
 import cpw.mods.fml.common.FMLCommonHandler;
 import io.netty.util.concurrent.GenericFutureListener;

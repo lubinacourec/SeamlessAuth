@@ -14,8 +14,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.mojang.authlib.GameProfile;
 
 import anon.seamlessauth.SeamlessAuth;
-import anon.seamlessauth.network.packet.KeyRequest;
-import anon.seamlessauth.network.server.NetHandlerAuthServer;
+import anon.seamlessauth.auth.network.packet.KeyRequest;
+import anon.seamlessauth.auth.network.server.NetHandlerAuthServer;
 import io.netty.util.concurrent.GenericFutureListener;
 
 @Mixin(NetHandlerLoginServer.class)

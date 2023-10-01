@@ -8,10 +8,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import anon.seamlessauth.network.packet.ChallengeRequest;
-import anon.seamlessauth.network.packet.ChallengeResponse;
-import anon.seamlessauth.network.packet.KeyRequest;
-import anon.seamlessauth.network.packet.KeyResponse;
+import anon.seamlessauth.auth.network.packet.ChallengeRequest;
+import anon.seamlessauth.auth.network.packet.ChallengeResponse;
+import anon.seamlessauth.auth.network.packet.KeyRequest;
+import anon.seamlessauth.auth.network.packet.KeyResponse;
 
 @Mixin(EnumConnectionState.class)
 public class ConnectionStateMixin {

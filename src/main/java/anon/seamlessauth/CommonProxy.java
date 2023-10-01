@@ -2,10 +2,11 @@ package anon.seamlessauth;
 
 import net.minecraft.network.EnumConnectionState;
 
-import anon.seamlessauth.network.packet.ChallengeRequest;
-import anon.seamlessauth.network.packet.ChallengeResponse;
-import anon.seamlessauth.network.packet.KeyRequest;
-import anon.seamlessauth.network.packet.KeyResponse;
+import anon.seamlessauth.auth.network.packet.ChallengeRequest;
+import anon.seamlessauth.auth.network.packet.ChallengeResponse;
+import anon.seamlessauth.auth.network.packet.KeyRequest;
+import anon.seamlessauth.auth.network.packet.KeyResponse;
+import anon.seamlessauth.skin.network.PacketDispatcher;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -24,6 +25,8 @@ public class CommonProxy {
         /* client-side */
         EnumConnectionState.LOGIN.func_150756_b(3, KeyRequest.class);
         EnumConnectionState.LOGIN.func_150756_b(4, ChallengeRequest.class);
+
+        PacketDispatcher.registerPackets();
     }
 
     public void init(FMLInitializationEvent event) {}
@@ -31,10 +34,4 @@ public class CommonProxy {
     public void postInit(FMLPostInitializationEvent event) {}
 
     public void serverStarting(FMLServerStartingEvent event) {}
-
-    public String expandPath(String original) {
-        String result = original;
-        if (result.startsWith("~/")) result = result.replaceFirst("~", System.getProperty("user.home"));
-        return result;
-    }
 }

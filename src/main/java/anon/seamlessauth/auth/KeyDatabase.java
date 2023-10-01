@@ -1,4 +1,4 @@
-package anon.seamlessauth.util;
+package anon.seamlessauth.auth;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,6 +19,7 @@ import java.util.UUID;
 import com.google.common.base.Charsets;
 
 import anon.seamlessauth.SeamlessAuth;
+import anon.seamlessauth.util.Pair;
 import cpw.mods.fml.common.FMLCommonHandler;
 
 public class KeyDatabase {

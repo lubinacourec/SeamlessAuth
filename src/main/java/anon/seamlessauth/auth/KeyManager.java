@@ -1,4 +1,4 @@
-package anon.seamlessauth.util;
+package anon.seamlessauth.auth;
 
 import java.io.IOException;
 import java.nio.file.Files;

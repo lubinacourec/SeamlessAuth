@@ -1,4 +1,4 @@
-package anon.seamlessauth.network.packet;
+package anon.seamlessauth.auth.network.packet;
 
 import java.io.IOException;
 
@@ -6,7 +6,7 @@ import net.minecraft.network.INetHandler;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
 
-import anon.seamlessauth.network.server.INetHandlerAuthServer;
+import anon.seamlessauth.auth.network.server.INetHandlerAuthServer;
 
 public class ChallengeResponse extends Packet {
 

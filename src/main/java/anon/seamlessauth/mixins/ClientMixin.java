@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import anon.seamlessauth.SeamlessAuth;
-import anon.seamlessauth.network.client.NetHandlerAuthClient;
+import anon.seamlessauth.auth.network.client.NetHandlerAuthClient;
 
 @Mixin(NetHandlerLoginClient.class)
 public abstract class ClientMixin {

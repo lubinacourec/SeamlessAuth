@@ -9,6 +9,9 @@ public class Config {
     public static String pubKeyPath;
     public static String prvKeyPath;
 
+    public static String skinPath;
+    public static String capePath;
+
     public static String databasePath;
     public static boolean implicitRegistration;
 
@@ -26,6 +29,17 @@ public class Config {
             "authkey.prv",
             "Path to the private component of the keypair used for authentication. An initial ~ expands to the current user's home directory.");
 
+        skinPath = configuration.getString(
+            "skinPath",
+            "client",
+            "skin.png",
+            "Path to the image that will be used as this client's skin. An initial ~ expands to the current user's home directory.");
+        capePath = configuration.getString(
+            "capePath",
+            "client",
+            "cape.png",
+            "Path to the image that will be used as this client's cape. An initial ~ expands to the current user's home directory.");
+
         databasePath = configuration.getString(
             "databasePath",
             "server",
@@ -40,5 +54,11 @@ public class Config {
         if (configuration.hasChanged()) {
             configuration.save();
         }
+    }
+
+    public static String expandPath(String original) {
+        String result = original;
+        if (result.startsWith("~/")) result = result.replaceFirst("~", System.getProperty("user.home"));
+        return result;
     }
 }

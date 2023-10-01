@@ -6,6 +6,6 @@
   "target": "@env(DEFAULT)",
   "compatibilityLevel": "JAVA_8",
   "mixins": ["ConnectionStateMixin"],
-  "client": ["ClientMixin"],
+  "client": ["ClientMixin", "SkinMixin"],
   "server": ["ServerMixin"]
 }

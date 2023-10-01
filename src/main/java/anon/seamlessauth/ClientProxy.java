@@ -1,6 +1,6 @@
 package anon.seamlessauth;
 
-import anon.seamlessauth.util.KeyManager;
+import anon.seamlessauth.auth.KeyManager;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class ClientProxy extends CommonProxy {
@@ -11,6 +11,6 @@ public class ClientProxy extends CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
 
-        keyManager = new KeyManager(expandPath(Config.pubKeyPath), expandPath(Config.prvKeyPath));
+        keyManager = new KeyManager(Config.expandPath(Config.pubKeyPath), Config.expandPath(Config.prvKeyPath));
     }
 }

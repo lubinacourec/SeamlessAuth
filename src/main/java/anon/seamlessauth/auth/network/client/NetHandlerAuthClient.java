@@ -1,4 +1,4 @@
-package anon.seamlessauth.network.client;
+package anon.seamlessauth.auth.network.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -8,10 +8,10 @@ import net.minecraft.util.ChatComponentText;
 
 import anon.seamlessauth.ClientProxy;
 import anon.seamlessauth.SeamlessAuth;
-import anon.seamlessauth.network.packet.ChallengeRequest;
-import anon.seamlessauth.network.packet.ChallengeResponse;
-import anon.seamlessauth.network.packet.KeyRequest;
-import anon.seamlessauth.network.packet.KeyResponse;
+import anon.seamlessauth.auth.network.packet.ChallengeRequest;
+import anon.seamlessauth.auth.network.packet.ChallengeResponse;
+import anon.seamlessauth.auth.network.packet.KeyRequest;
+import anon.seamlessauth.auth.network.packet.KeyResponse;
 import io.netty.util.concurrent.GenericFutureListener;
 
 public class NetHandlerAuthClient extends NetHandlerLoginClient implements INetHandlerAuthClient {
