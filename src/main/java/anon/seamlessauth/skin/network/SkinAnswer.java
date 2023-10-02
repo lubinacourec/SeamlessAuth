@@ -2,6 +2,7 @@ package anon.seamlessauth.skin.network;
 
 import java.util.UUID;
 
+import anon.seamlessauth.Config;
 import anon.seamlessauth.skin.ClientSkinHandler;
 import anon.seamlessauth.skin.ServerSkinHandler;
 import anon.seamlessauth.util.Pair;
@@ -46,6 +47,8 @@ public class SkinAnswer implements IMessage, IMessageHandler<SkinAnswer, IMessag
 
     @Override
     public IMessage onMessage(SkinAnswer message, MessageContext ctx) {
+        if (!Config.enableSkinSharing) return null;
+
         Pair<byte[], byte[]> pair = new Pair<>(message.skinHash, message.capeHash);
         if (ctx.side == Side.CLIENT) ClientSkinHandler.instance.queryCompleted(message.uuid, pair);
         if (ctx.side == Side.SERVER) ServerSkinHandler.instance.queryCompleted(message.uuid, pair);

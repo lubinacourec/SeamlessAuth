@@ -15,6 +15,8 @@ public class Config {
     public static String databasePath;
     public static boolean implicitRegistration;
 
+    public static boolean enableSkinSharing;
+
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
 
@@ -50,6 +52,12 @@ public class Config {
             "server",
             true,
             "Decides whether the server will accept and pin keys for usernames that aren't otherwise registered already. Disabling this will mean only keys that you specifically authorize will be able to join.");
+
+        enableSkinSharing = configuration.getBoolean(
+            "enableSkinSharing",
+            "general",
+            true,
+            "Decides whether the client or server will send or forward skin queries or requests.");
 
         if (configuration.hasChanged()) {
             configuration.save();
