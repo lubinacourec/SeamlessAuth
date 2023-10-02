@@ -116,7 +116,8 @@ public class SkinMixin {
             return;
         }
 
-        ClientSkinHandler.instance.querySkin(user.getId(), new SkinMixinHelper((SkinManager) (Object) this, callback));
+        if (Config.enableSkinSharing) ClientSkinHandler.instance
+            .querySkin(user.getId(), new SkinMixinHelper((SkinManager) (Object) this, callback));
     }
 
     @Overwrite

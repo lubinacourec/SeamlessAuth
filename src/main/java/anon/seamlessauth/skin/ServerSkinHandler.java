@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +26,6 @@ import anon.seamlessauth.skin.network.SkinResponse;
 import anon.seamlessauth.util.Bytes;
 import anon.seamlessauth.util.Pair;
 import cpw.mods.fml.common.FMLCommonHandler;
-import scala.actors.threadpool.Arrays;
 
 public class ServerSkinHandler {
 
@@ -64,7 +64,7 @@ public class ServerSkinHandler {
                 return;
             }
 
-            PacketDispatcher.dispatcher.sendTo(new SkinQuery(uuid), target);
+            PacketDispatcher.sendTo(new SkinQuery(uuid), target);
         }
     }
 
@@ -72,8 +72,7 @@ public class ServerSkinHandler {
         if (!queries.containsKey(uuid)) return;
         queries.get(uuid)
             .forEach(
-                player -> PacketDispatcher.dispatcher
-                    .sendTo(new SkinAnswer(uuid, available.first, available.second), player));
+                player -> PacketDispatcher.sendTo(new SkinAnswer(uuid, available.first, available.second), player));
         queries.remove(uuid);
 
         queryCache.put(uuid, available);
@@ -99,7 +98,7 @@ public class ServerSkinHandler {
             return;
         }
 
-        PacketDispatcher.dispatcher.sendTo(new SkinRequest(hash), target);
+        PacketDispatcher.sendTo(new SkinRequest(hash), target);
     }
 
     public void requestCompleted(byte[] hash, byte[] data, boolean fromCache) {
@@ -123,7 +122,7 @@ public class ServerSkinHandler {
 
         if (!requests.containsKey(key)) return;
         requests.get(key)
-            .forEach(player -> PacketDispatcher.dispatcher.sendTo(new SkinResponse(hash, data), player));
+            .forEach(player -> PacketDispatcher.sendTo(new SkinResponse(hash, data), player));
         requests.remove(key);
     }
 

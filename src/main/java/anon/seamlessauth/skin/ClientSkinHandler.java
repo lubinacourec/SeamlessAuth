@@ -84,8 +84,8 @@ public class ClientSkinHandler {
             list.add(callback);
 
             if (queryCache.containsKey(uuid)) queryCompleted(uuid, queryCache.get(uuid));
-            else if (list.size() == 1) PacketDispatcher.dispatcher.sendToServer(new SkinQuery(uuid));
-        } else PacketDispatcher.dispatcher.sendToServer(new SkinQuery(uuid));
+            else if (list.size() == 1) PacketDispatcher.sendToServer(new SkinQuery(uuid));
+        } else PacketDispatcher.sendToServer(new SkinQuery(uuid));
     }
 
     public void queryCompleted(UUID uuid, Pair<byte[], byte[]> available) {
@@ -104,7 +104,7 @@ public class ClientSkinHandler {
         List<SkinCallback> list = requests.get(key);
         list.add(callback);
 
-        if (list.size() == 1) PacketDispatcher.dispatcher.sendToServer(new SkinRequest(hash));
+        if (list.size() == 1) PacketDispatcher.sendToServer(new SkinRequest(hash));
     }
 
     public void requestCompleted(byte[] hash, byte[] data) {

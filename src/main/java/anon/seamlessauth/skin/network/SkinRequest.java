@@ -1,5 +1,6 @@
 package anon.seamlessauth.skin.network;
 
+import anon.seamlessauth.Config;
 import anon.seamlessauth.skin.ClientSkinHandler;
 import anon.seamlessauth.skin.ServerSkinHandler;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -30,6 +31,8 @@ public class SkinRequest implements IMessage, IMessageHandler<SkinRequest, SkinR
 
     @Override
     public SkinResponse onMessage(SkinRequest message, MessageContext ctx) {
+        if (!Config.enableSkinSharing) return null;
+
         if (ctx.side == Side.CLIENT)
             return new SkinResponse(message.hash, ClientSkinHandler.instance.getDataFromHash(message.hash));
         if (ctx.side == Side.SERVER)
