@@ -17,7 +17,14 @@ public class Config {
 
     public static boolean enableSkinSharing;
 
+    private static File lastRead;
+
     public static void synchronizeConfiguration(File configFile) {
+        if (configFile == null) {
+            if (lastRead == null) return;
+            configFile = lastRead;
+        } else lastRead = configFile;
+
         Configuration configuration = new Configuration(configFile);
 
         pubKeyPath = configuration.getString(

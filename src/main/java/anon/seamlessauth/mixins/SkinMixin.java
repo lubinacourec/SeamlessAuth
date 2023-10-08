@@ -109,10 +109,10 @@ public class SkinMixin {
                     .getId())
             || Minecraft.getMinecraft()
                 .isSingleplayer()) {
-            if (ClientSkinHandler.instance.skinData != null)
-                func_152789_a(SkinMixinHelper.profileFromPath(Config.expandPath(Config.skinPath)), Type.SKIN, callback);
-            if (ClientSkinHandler.instance.capeData != null)
-                func_152789_a(SkinMixinHelper.profileFromPath(Config.expandPath(Config.capePath)), Type.CAPE, callback);
+
+            SkinMixinHelper.ownSkinCallback = callback;
+            SkinMixinHelper.loadOwnSkin();
+
             return;
         }
 

@@ -8,6 +8,7 @@ import net.minecraft.client.resources.SkinManager;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 
+import anon.seamlessauth.Config;
 import anon.seamlessauth.skin.ClientSkinHandler;
 
 // exists because mixin spergs out when you have nested anonymous classes/whatever
@@ -15,6 +16,8 @@ import anon.seamlessauth.skin.ClientSkinHandler;
 // anon.seamlessauth.mixins)
 // dunno, anyway this works so I'm not touching it anymore
 public class SkinMixinHelper implements ClientSkinHandler.QueryCallback {
+
+    public static SkinManager.SkinAvailableCallback ownSkinCallback;
 
     private SkinManager parent;
     private SkinManager.SkinAvailableCallback callback;
@@ -48,5 +51,18 @@ public class SkinMixinHelper implements ClientSkinHandler.QueryCallback {
                         parent.func_152789_a(profileFromHash(available.second), Type.CAPE, callback);
                 }
             });
+    }
+
+    public static void loadOwnSkin() {
+        SkinManager manager = Minecraft.getMinecraft()
+            .func_152342_ad();
+        if (ClientSkinHandler.instance.skinData != null) manager.func_152789_a(
+            SkinMixinHelper.profileFromPath(Config.expandPath(Config.skinPath)),
+            Type.SKIN,
+            ownSkinCallback);
+        if (ClientSkinHandler.instance.capeData != null) manager.func_152789_a(
+            SkinMixinHelper.profileFromPath(Config.expandPath(Config.capePath)),
+            Type.CAPE,
+            ownSkinCallback);
     }
 }
