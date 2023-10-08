@@ -1,8 +1,8 @@
 package anon.seamlessauth.auth.network.packet;
 
 import java.io.IOException;
-import java.security.KeyFactory;
 import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 
 import net.minecraft.network.INetHandler;
@@ -10,6 +10,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
 
 import anon.seamlessauth.auth.network.server.INetHandlerAuthServer;
+import anon.seamlessauth.util.CryptoInstances;
 
 public class KeyResponse extends Packet {
 
@@ -26,9 +27,8 @@ public class KeyResponse extends Packet {
         byte[] blob = readBlob(data);
 
         try {
-            key = KeyFactory.getInstance("RSA")
-                .generatePublic(new X509EncodedKeySpec(blob));
-        } catch (Exception e) {
+            key = CryptoInstances.rsaFactory.generatePublic(new X509EncodedKeySpec(blob));
+        } catch (InvalidKeySpecException e) {
             key = null;
         }
     }

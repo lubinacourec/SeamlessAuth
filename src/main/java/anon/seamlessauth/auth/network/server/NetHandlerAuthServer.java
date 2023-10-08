@@ -15,13 +15,12 @@ import com.google.common.base.Charsets;
 import com.mojang.authlib.GameProfile;
 
 import anon.seamlessauth.Config;
-import anon.seamlessauth.SeamlessAuth;
 import anon.seamlessauth.ServerProxy;
 import anon.seamlessauth.auth.network.packet.ChallengeRequest;
 import anon.seamlessauth.auth.network.packet.ChallengeResponse;
 import anon.seamlessauth.auth.network.packet.KeyResponse;
+import anon.seamlessauth.util.CryptoInstances;
 import anon.seamlessauth.util.Pair;
-import cpw.mods.fml.common.FMLCommonHandler;
 import io.netty.util.concurrent.GenericFutureListener;
 
 public class NetHandlerAuthServer extends NetHandlerLoginServer implements INetHandlerAuthServer {
@@ -29,19 +28,10 @@ public class NetHandlerAuthServer extends NetHandlerLoginServer implements INetH
     private static final SecureRandom challengeGenerator = new SecureRandom();
 
     private byte[] challenge = new byte[64];
-    private Cipher cipher;
 
     public NetHandlerAuthServer(MinecraftServer p_i45298_1_, NetworkManager p_i45298_2_, GameProfile user) {
         super(p_i45298_1_, p_i45298_2_);
         field_147337_i = func_152506_a(user);
-
-        try {
-            cipher = Cipher.getInstance("RSA");
-        } catch (Exception e) {
-            SeamlessAuth.LOG.fatal("failed to get RSA cipher", e);
-            FMLCommonHandler.instance()
-                .exitJava(1, false);
-        }
     }
 
     @Override
@@ -70,8 +60,8 @@ public class NetHandlerAuthServer extends NetHandlerLoginServer implements INetH
         byte[] encryptedChallenge;
 
         try {
-            cipher.init(Cipher.ENCRYPT_MODE, key);
-            encryptedChallenge = cipher.doFinal(challenge);
+            CryptoInstances.rsaCipher.init(Cipher.ENCRYPT_MODE, key);
+            encryptedChallenge = CryptoInstances.rsaCipher.doFinal(challenge);
         } catch (Exception e) {
             func_147322_a("invalid key");
             return;

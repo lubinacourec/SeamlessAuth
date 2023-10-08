@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
-import java.security.KeyFactory;
+import java.security.InvalidKeyException;
 import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -18,14 +16,13 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 
 import anon.seamlessauth.SeamlessAuth;
+import anon.seamlessauth.util.CryptoInstances;
 import cpw.mods.fml.common.FMLCommonHandler;
 
 public class KeyManager {
 
     public PublicKey pubKey;
     public PrivateKey prvKey;
-
-    private Cipher cipher;
 
     public KeyManager(String pubKeyPath, String prvKeyPath) {
         SeamlessAuth.LOG.info("Loading keys at [(" + pubKeyPath + "), (" + prvKeyPath + ")]...");
@@ -36,27 +33,16 @@ public class KeyManager {
             X509EncodedKeySpec pubSpec = new X509EncodedKeySpec(pubData);
             PKCS8EncodedKeySpec prvSpec = new PKCS8EncodedKeySpec(prvData);
 
-            KeyFactory factory = KeyFactory.getInstance("RSA");
-            pubKey = factory.generatePublic(pubSpec);
-            prvKey = factory.generatePrivate(prvSpec);
+            pubKey = CryptoInstances.rsaFactory.generatePublic(pubSpec);
+            prvKey = CryptoInstances.rsaFactory.generatePrivate(prvSpec);
 
             SeamlessAuth.LOG.info("Successfully loaded stored keys!");
         } catch (NoSuchFileException e) {
             SeamlessAuth.LOG.info("No existing keys found, generating new pair...");
 
-            KeyPairGenerator kpg;
-            try {
-                kpg = KeyPairGenerator.getInstance("RSA");
-            } catch (NoSuchAlgorithmException noSuchAlgorithmException) {
-                SeamlessAuth.LOG.fatal("failed to get RSA generator", noSuchAlgorithmException);
-                FMLCommonHandler.instance()
-                    .exitJava(1, false);
-                return;
-            }
+            CryptoInstances.rsaGenerator.initialize(4096);
 
-            kpg.initialize(4096);
-
-            KeyPair pair = kpg.generateKeyPair();
+            KeyPair pair = CryptoInstances.rsaGenerator.generateKeyPair();
             pubKey = pair.getPublic();
             prvKey = pair.getPrivate();
 
@@ -74,18 +60,10 @@ public class KeyManager {
             FMLCommonHandler.instance()
                 .exitJava(1, false);
         }
-
-        try {
-            cipher = Cipher.getInstance("RSA");
-            cipher.init(Cipher.DECRYPT_MODE, prvKey);
-        } catch (Exception e) {
-            SeamlessAuth.LOG.fatal("failed to initialise RSA cipher", e);
-            FMLCommonHandler.instance()
-                .exitJava(1, false);
-        }
     }
 
-    public byte[] decrypt(byte[] in) throws IllegalBlockSizeException, BadPaddingException {
-        return cipher.doFinal(in);
+    public byte[] decrypt(byte[] in) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        CryptoInstances.rsaCipher.init(Cipher.DECRYPT_MODE, prvKey);
+        return CryptoInstances.rsaCipher.doFinal(in);
     }
 }

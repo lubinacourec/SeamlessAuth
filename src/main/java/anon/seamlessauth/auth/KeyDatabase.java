@@ -5,8 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
@@ -19,6 +17,7 @@ import java.util.UUID;
 import com.google.common.base.Charsets;
 
 import anon.seamlessauth.SeamlessAuth;
+import anon.seamlessauth.util.CryptoInstances;
 import anon.seamlessauth.util.Pair;
 import cpw.mods.fml.common.FMLCommonHandler;
 
@@ -31,16 +30,6 @@ public class KeyDatabase {
 
     public KeyDatabase(String databasePath) {
         path = databasePath;
-
-        KeyFactory kf;
-        try {
-            kf = KeyFactory.getInstance("RSA");
-        } catch (NoSuchAlgorithmException e) {
-            SeamlessAuth.LOG.fatal("failed to get KeyFactory instance for RSA", e);
-            FMLCommonHandler.instance()
-                .exitJava(1, false);
-            return;
-        }
 
         try {
             List<String> lines = Files.readAllLines(Paths.get(path), Charsets.UTF_8);
@@ -57,7 +46,7 @@ public class KeyDatabase {
                     .decode(components[2]);
                 PublicKey key;
                 try {
-                    key = kf.generatePublic(new X509EncodedKeySpec(decoded));
+                    key = CryptoInstances.rsaFactory.generatePublic(new X509EncodedKeySpec(decoded));
                 } catch (InvalidKeySpecException e) {
                     SeamlessAuth.LOG.warn("invalid key in entry for: " + components[0]);
                     continue;
