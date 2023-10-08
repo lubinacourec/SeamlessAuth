@@ -1,5 +1,6 @@
 package anon.seamlessauth.skin.network;
 
+import java.util.Base64;
 import java.util.UUID;
 
 import anon.seamlessauth.Config;
@@ -51,6 +52,14 @@ public class SkinAnswer implements IMessage, IMessageHandler<SkinAnswer, IMessag
 
     @Override
     public IMessage onMessage(SkinAnswer message, MessageContext ctx) {
+        SeamlessAuth.debug(
+            "recieved SkinAnswer for {}, hashes: [{}; {}]",
+            message.uuid != null ? message.uuid
+                : (ctx.side == Side.SERVER ? ctx.getServerHandler().playerEntity.getUniqueID() : "unknown"),
+            message.skinHash != null ? Base64.getUrlEncoder()
+                .encodeToString(message.skinHash) : "N/A",
+            message.capeHash != null ? Base64.getUrlEncoder()
+                .encodeToString(message.capeHash) : "N/A");
         if (!Config.enableSkinSharing) return null;
 
         Pair<byte[], byte[]> pair = new Pair<>(message.skinHash, message.capeHash);

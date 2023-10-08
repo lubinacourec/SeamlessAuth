@@ -3,6 +3,7 @@ package anon.seamlessauth.skin.network;
 import java.util.UUID;
 
 import anon.seamlessauth.Config;
+import anon.seamlessauth.SeamlessAuth;
 import anon.seamlessauth.skin.ClientSkinHandler;
 import anon.seamlessauth.skin.ServerSkinHandler;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -34,6 +35,7 @@ public class SkinQuery implements IMessage, IMessageHandler<SkinQuery, SkinAnswe
 
     @Override
     public SkinAnswer onMessage(SkinQuery message, MessageContext ctx) {
+        SeamlessAuth.debug("recieved SkinQuery for {}", message.uuid);
         if (!Config.enableSkinSharing) return null;
 
         if (ctx.side == Side.CLIENT) return new SkinAnswer(

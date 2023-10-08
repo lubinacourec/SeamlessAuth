@@ -17,6 +17,8 @@ public class Config {
 
     public static boolean enableSkinSharing;
 
+    public static boolean debugLogging;
+
     private static File lastRead;
 
     public static void synchronizeConfiguration(File configFile) {
@@ -65,6 +67,12 @@ public class Config {
             "general",
             true,
             "Decides whether the client or server will send or forward skin queries or requests.");
+
+        debugLogging = configuration.getBoolean(
+            "debugLogging",
+            "general",
+            false,
+            "Decides whether extra information will be printed in the log.");
 
         if (configuration.hasChanged()) {
             configuration.save();

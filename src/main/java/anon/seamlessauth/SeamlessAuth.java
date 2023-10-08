@@ -37,4 +37,8 @@ public class SeamlessAuth {
     public void serverStarting(FMLServerStartingEvent event) {
         proxy.serverStarting(event);
     }
+
+    public static void debug(String formatString, Object... objects) {
+        if (Config.debugLogging) SeamlessAuth.LOG.info(formatString, objects);
+    }
 }
