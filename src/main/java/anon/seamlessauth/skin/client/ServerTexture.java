@@ -22,7 +22,6 @@ public class ServerTexture extends FileTexture {
 
     private final byte[] hash;
 
-    private boolean textureUploaded = false;
     private boolean downloadQueued = false;
     private BufferedImage bufferedImage;
 
@@ -32,12 +31,11 @@ public class ServerTexture extends FileTexture {
     }
 
     private void ensureTextureUploaded() {
-        if (textureUploaded) return;
         if (bufferedImage == null) return;
 
         if (textureLocation != null) deleteGlTexture();
         TextureUtil.uploadTextureImage(super.getGlTextureId(), bufferedImage);
-        textureUploaded = true;
+        bufferedImage = null;
     }
 
     public int getGlTextureId() {
@@ -71,13 +69,12 @@ public class ServerTexture extends FileTexture {
                     return;
                 }
 
-                bufferedImage = image;
                 if (imageBuffer != null) {
-                    bufferedImage = imageBuffer.parseUserSkin(bufferedImage);
+                    image = imageBuffer.parseUserSkin(image);
                     imageBuffer.func_152634_a();
                 }
+                bufferedImage = image;
 
-                textureUploaded = false;
                 downloadQueued = false;
             }
         });

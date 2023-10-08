@@ -2,8 +2,6 @@ package anon.seamlessauth.skin;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
@@ -24,40 +22,44 @@ import anon.seamlessauth.skin.network.SkinQuery;
 import anon.seamlessauth.skin.network.SkinRequest;
 import anon.seamlessauth.skin.network.SkinResponse;
 import anon.seamlessauth.util.Bytes;
+import anon.seamlessauth.util.CryptoInstances;
 import anon.seamlessauth.util.Pair;
-import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
 
 public class ServerSkinHandler {
 
     public static final ServerSkinHandler instance = new ServerSkinHandler();
     private final static File cacheDir = new File("skin-cache");
 
-    private MessageDigest shaInstance;
-
-    private Map<UUID, List<EntityPlayerMP>> queries = new HashMap<>();
-    private Map<Bytes, List<EntityPlayerMP>> requests = new HashMap<>();
+    private Map<UUID, List<EntityPlayerMP>> queryRequesters = new HashMap<>();
+    private Map<Bytes, List<EntityPlayerMP>> textureRequesters = new HashMap<>();
 
     private Map<UUID, Pair<byte[], byte[]>> queryCache = new HashMap<>();
-    private Map<Bytes, UUID> ownerMap = new HashMap<>();
-
-    public ServerSkinHandler() {
-        try {
-            shaInstance = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
-            SeamlessAuth.LOG.fatal("failed to get SHA instance", e);
-            FMLCommonHandler.instance()
-                .exitJava(1, false);
+    private Map<Bytes, List<UUID>> ownerMap = new HashMap<>();
+    
+    @EventHandler
+    public void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
+        UUID uuid = event.player.getUniqueID();
+        queryRequesters.remove(uuid);
+        Pair<byte[], byte[]> hashes = queryCache.get(uuid);
+        if (hashes != null) {
+            if (hashes.first != null) ownerMap.get(new Bytes(hashes.first)).remove(uuid);
+            if (hashes.second != null) ownerMap.get(new Bytes(hashes.second)).remove(uuid);
         }
     }
 
     public void querySkin(UUID uuid, EntityPlayerMP requester) {
-        queries.putIfAbsent(uuid, new ArrayList<>());
+        queryRequesters.putIfAbsent(uuid, new ArrayList<>());
 
-        List<EntityPlayerMP> list = queries.get(uuid);
+        List<EntityPlayerMP> list = queryRequesters.get(uuid);
         list.add(requester);
 
-        if (queryCache.containsKey(uuid)) queryCompleted(uuid, queryCache.get(uuid));
-        else if (list.size() == 1) {
+        Pair<byte[], byte[]> cached = queryCache.get(uuid);
+        if (cached != null)
+            PacketDispatcher.sendTo(new SkinAnswer(uuid, cached.first, cached.second), requester);
+        else {
             EntityPlayerMP target = getPlayerFromUUID(uuid);
             if (target == null) {
                 queryCompleted(uuid, new Pair<>(null, null));
@@ -69,22 +71,32 @@ public class ServerSkinHandler {
     }
 
     public void queryCompleted(UUID uuid, Pair<byte[], byte[]> available) {
-        if (!queries.containsKey(uuid)) return;
-        queries.get(uuid)
-            .forEach(
-                player -> PacketDispatcher.sendTo(new SkinAnswer(uuid, available.first, available.second), player));
-        queries.remove(uuid);
-
+        if (queryCache.containsKey(uuid) && queryCache.get(uuid).equals(available)) return;
+        
         queryCache.put(uuid, available);
-        if (available.first != null) ownerMap.put(new Bytes(available.first), uuid);
-        if (available.second != null) ownerMap.put(new Bytes(available.second), uuid);
+        if (available.first != null) {
+            Bytes key = new Bytes(available.first);
+            ownerMap.putIfAbsent(key, new ArrayList<>());
+            ownerMap.get(key).add(uuid);
+        }
+
+        if (available.second != null) {
+            Bytes key = new Bytes(available.second);
+            ownerMap.putIfAbsent(key, new ArrayList<>());
+            ownerMap.get(key).add(uuid);
+        }
+
+        if (!queryRequesters.containsKey(uuid)) return;
+        IMessage packet = new SkinAnswer(uuid, available.first, available.second);
+        queryRequesters.get(uuid).forEach(
+                player -> PacketDispatcher.sendTo(packet, player));
     }
 
     public void requestSkin(byte[] hash, EntityPlayerMP requester) {
         Bytes key = new Bytes(hash);
-        requests.putIfAbsent(key, new ArrayList<>());
+        textureRequesters.putIfAbsent(key, new ArrayList<>());
 
-        List<EntityPlayerMP> list = requests.get(key);
+        List<EntityPlayerMP> list = textureRequesters.get(key);
         list.add(requester);
 
         try {
@@ -92,7 +104,11 @@ public class ServerSkinHandler {
             return;
         } catch (IOException e) {}
 
-        EntityPlayerMP target = getPlayerFromUUID(ownerMap.get(key));
+        EntityPlayerMP target;
+        try {
+            target = getPlayerFromUUID(ownerMap.get(key).get(0));   
+        } catch (IndexOutOfBoundsException e) { target = null; }
+
         if (target == null) {
             requestCompleted(hash, null, false);
             return;
@@ -103,7 +119,7 @@ public class ServerSkinHandler {
 
     public void requestCompleted(byte[] hash, byte[] data, boolean fromCache) {
         if (data != null) {
-            byte[] computed = shaInstance.digest(data);
+            byte[] computed = CryptoInstances.sha.digest(data);
             if (!Arrays.equals(hash, computed)) {
                 SeamlessAuth.LOG.warn("computed hash differed from expected hash");
                 return;
@@ -120,10 +136,10 @@ public class ServerSkinHandler {
                 e);
         }
 
-        if (!requests.containsKey(key)) return;
-        requests.get(key)
+        if (!textureRequesters.containsKey(key)) return;
+        textureRequesters.get(key)
             .forEach(player -> PacketDispatcher.sendTo(new SkinResponse(hash, data), player));
-        requests.remove(key);
+        textureRequesters.remove(key);
     }
 
     @SuppressWarnings("unchecked")
