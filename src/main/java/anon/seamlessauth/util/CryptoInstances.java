@@ -12,11 +12,12 @@ import anon.seamlessauth.SeamlessAuth;
 import cpw.mods.fml.common.FMLCommonHandler;
 
 public class CryptoInstances {
+
     public static MessageDigest sha;
     public static KeyFactory rsaFactory;
     public static KeyPairGenerator rsaGenerator;
     public static Cipher rsaCipher;
-    
+
     static {
         try {
             sha = MessageDigest.getInstance("SHA-256");

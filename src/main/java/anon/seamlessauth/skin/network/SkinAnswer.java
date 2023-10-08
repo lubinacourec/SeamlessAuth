@@ -57,8 +57,10 @@ public class SkinAnswer implements IMessage, IMessageHandler<SkinAnswer, IMessag
         if (ctx.side == Side.CLIENT) ClientSkinHandler.instance.queryCompleted(message.uuid, pair);
         if (ctx.side == Side.SERVER) {
             UUID real = ctx.getServerHandler().playerEntity.getUniqueID();
-            if (message.uuid != null && !message.uuid.equals(real))
-                SeamlessAuth.LOG.warn("client {} attempted to set skin hashes for UUID {}; setting for their actual UUID", real, message.uuid);
+            if (message.uuid != null && !message.uuid.equals(real)) SeamlessAuth.LOG.warn(
+                "client {} attempted to set skin hashes for UUID {}; setting for their actual UUID",
+                real,
+                message.uuid);
             ServerSkinHandler.instance.queryCompleted(real, pair);
         }
 

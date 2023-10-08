@@ -38,7 +38,7 @@ public class ClientSkinHandler {
     public ClientSkinHandler() {
         reload();
     }
-    
+
     public void reload() {
         try {
             skinData = Files.readAllBytes(Paths.get(Config.expandPath(Config.skinPath)));
@@ -57,6 +57,7 @@ public class ClientSkinHandler {
             capeHash = null;
             SeamlessAuth.LOG.warn("Failed to load cape!");
         }
+
         PacketDispatcher.sendToServer(new SkinAnswer(null, skinHash, capeHash));
     }
 

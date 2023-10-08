@@ -38,15 +38,17 @@ public class ServerSkinHandler {
 
     private Map<UUID, Pair<byte[], byte[]>> queryCache = new HashMap<>();
     private Map<Bytes, List<UUID>> ownerMap = new HashMap<>();
-    
+
     @EventHandler
     public void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
         UUID uuid = event.player.getUniqueID();
         queryRequesters.remove(uuid);
         Pair<byte[], byte[]> hashes = queryCache.get(uuid);
         if (hashes != null) {
-            if (hashes.first != null) ownerMap.get(new Bytes(hashes.first)).remove(uuid);
-            if (hashes.second != null) ownerMap.get(new Bytes(hashes.second)).remove(uuid);
+            if (hashes.first != null) ownerMap.get(new Bytes(hashes.first))
+                .remove(uuid);
+            if (hashes.second != null) ownerMap.get(new Bytes(hashes.second))
+                .remove(uuid);
         }
     }
 
@@ -57,8 +59,7 @@ public class ServerSkinHandler {
         list.add(requester);
 
         Pair<byte[], byte[]> cached = queryCache.get(uuid);
-        if (cached != null)
-            PacketDispatcher.sendTo(new SkinAnswer(uuid, cached.first, cached.second), requester);
+        if (cached != null) PacketDispatcher.sendTo(new SkinAnswer(uuid, cached.first, cached.second), requester);
         else {
             EntityPlayerMP target = getPlayerFromUUID(uuid);
             if (target == null) {
@@ -71,25 +72,28 @@ public class ServerSkinHandler {
     }
 
     public void queryCompleted(UUID uuid, Pair<byte[], byte[]> available) {
-        if (queryCache.containsKey(uuid) && queryCache.get(uuid).equals(available)) return;
-        
+        if (queryCache.containsKey(uuid) && queryCache.get(uuid)
+            .equals(available)) return;
+
         queryCache.put(uuid, available);
         if (available.first != null) {
             Bytes key = new Bytes(available.first);
             ownerMap.putIfAbsent(key, new ArrayList<>());
-            ownerMap.get(key).add(uuid);
+            ownerMap.get(key)
+                .add(uuid);
         }
 
         if (available.second != null) {
             Bytes key = new Bytes(available.second);
             ownerMap.putIfAbsent(key, new ArrayList<>());
-            ownerMap.get(key).add(uuid);
+            ownerMap.get(key)
+                .add(uuid);
         }
 
         if (!queryRequesters.containsKey(uuid)) return;
         IMessage packet = new SkinAnswer(uuid, available.first, available.second);
-        queryRequesters.get(uuid).forEach(
-                player -> PacketDispatcher.sendTo(packet, player));
+        queryRequesters.get(uuid)
+            .forEach(player -> PacketDispatcher.sendTo(packet, player));
     }
 
     public void requestSkin(byte[] hash, EntityPlayerMP requester) {
@@ -106,8 +110,12 @@ public class ServerSkinHandler {
 
         EntityPlayerMP target;
         try {
-            target = getPlayerFromUUID(ownerMap.get(key).get(0));   
-        } catch (IndexOutOfBoundsException e) { target = null; }
+            target = getPlayerFromUUID(
+                ownerMap.get(key)
+                    .get(0));
+        } catch (IndexOutOfBoundsException e) {
+            target = null;
+        }
 
         if (target == null) {
             requestCompleted(hash, null, false);
