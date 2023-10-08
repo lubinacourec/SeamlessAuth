@@ -47,8 +47,10 @@ public class SkinMixinHelper implements ClientSkinHandler.QueryCallback {
                 public void run() {
                     if (available.first != null)
                         parent.func_152789_a(profileFromHash(available.first), Type.SKIN, callback);
+                    else callback.func_152121_a(Type.SKIN, null);
                     if (available.second != null)
                         parent.func_152789_a(profileFromHash(available.second), Type.CAPE, callback);
+                    else callback.func_152121_a(Type.CAPE, null);
                 }
             });
     }
@@ -60,9 +62,11 @@ public class SkinMixinHelper implements ClientSkinHandler.QueryCallback {
             SkinMixinHelper.profileFromPath(Config.expandPath(Config.skinPath)),
             Type.SKIN,
             ownSkinCallback);
+        else ownSkinCallback.func_152121_a(Type.SKIN, null);
         if (ClientSkinHandler.instance.capeData != null) manager.func_152789_a(
             SkinMixinHelper.profileFromPath(Config.expandPath(Config.capePath)),
             Type.CAPE,
             ownSkinCallback);
+        else ownSkinCallback.func_152121_a(Type.CAPE, null);
     }
 }

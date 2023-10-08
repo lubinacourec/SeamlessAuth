@@ -42,6 +42,7 @@ public class SkinMixin {
     @Overwrite
     public ResourceLocation func_152789_a(MinecraftProfileTexture skin, final Type kind,
         final SkinManager.SkinAvailableCallback callback) {
+        ResourceLocation fallback = kind == Type.SKIN ? SkinManager.field_152793_a : null;
 
         String url = skin.getUrl();
         boolean local;
@@ -52,7 +53,7 @@ public class SkinMixin {
             local = true;
         } else {
             SeamlessAuth.LOG.warn("invalid profile texture passed to SkinManager, other mods may be interfering");
-            return SkinManager.field_152793_a;
+            return fallback;
         }
         String path = url.substring(url.indexOf("://") + 3);
 
@@ -84,13 +85,13 @@ public class SkinMixin {
                         .decode(path);
                 } catch (IllegalArgumentException e) {
                     SeamlessAuth.LOG.warn("invalid remote skin hash: " + url, e);
-                    return SkinManager.field_152793_a;
+                    return fallback;
                 }
 
                 File cacheFile = new File(new File(Minecraft.getMinecraft().mcDataDir, "skin-cache"), path);
 
-                textureObject = new ServerTexture(hash, cacheFile, SkinManager.field_152793_a, imageBuffer);
-            } else textureObject = new FileTexture(new File(path), SkinManager.field_152793_a, imageBuffer);
+                textureObject = new ServerTexture(hash, cacheFile, fallback, imageBuffer);
+            } else textureObject = new FileTexture(new File(path), fallback, imageBuffer);
 
             field_152795_c.loadTexture(resourceLocation, textureObject);
         }

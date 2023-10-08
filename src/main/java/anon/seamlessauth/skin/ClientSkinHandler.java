@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import net.minecraft.client.Minecraft;
+
 import anon.seamlessauth.Config;
 import anon.seamlessauth.SeamlessAuth;
 import anon.seamlessauth.skin.network.PacketDispatcher;
@@ -58,7 +60,8 @@ public class ClientSkinHandler {
             SeamlessAuth.LOG.warn("Failed to load cape!");
         }
 
-        PacketDispatcher.sendToServer(new SkinAnswer(null, skinHash, capeHash));
+        if (!Minecraft.getMinecraft()
+            .isSingleplayer()) PacketDispatcher.sendToServer(new SkinAnswer(null, skinHash, capeHash));
     }
 
     public byte[] getDataFromHash(byte[] hash) {
