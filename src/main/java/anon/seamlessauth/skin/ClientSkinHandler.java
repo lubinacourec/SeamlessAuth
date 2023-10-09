@@ -60,7 +60,7 @@ public class ClientSkinHandler {
             SeamlessAuth.LOG.warn("Failed to load cape!");
         }
 
-        if (!Minecraft.getMinecraft()
+        if (Config.enableSkinSharing && !Minecraft.getMinecraft()
             .isSingleplayer()) PacketDispatcher.sendToServer(new SkinAnswer(null, skinHash, capeHash));
     }
 
@@ -71,6 +71,7 @@ public class ClientSkinHandler {
     }
 
     public void querySkin(UUID uuid, QueryCallback callback) {
+        if (!Config.enableSkinSharing) return;
         if (callback != null) {
             queryCallbacks.putIfAbsent(uuid, new ArrayList<>());
 
