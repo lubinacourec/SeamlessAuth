@@ -61,6 +61,7 @@ public class ServerTexture extends FileTexture {
                 try {
                     FileUtils.copyInputStreamToFile(new ByteArrayInputStream(data), file);
                     image = ImageIO.read(file);
+                    if (image == null) throw new IOException("Failed to load image.");
                 } catch (IOException e) {
                     SeamlessAuth.LOG.warn(
                         "failed to read data for resource: " + Base64.getUrlEncoder()

@@ -28,6 +28,7 @@ public class FileTexture extends SimpleTexture {
         fileLoaded = false;
         try {
             BufferedImage bufferedImage = ImageIO.read(file);
+            if (bufferedImage == null) throw new IOException("Failed to load image.");
 
             if (imageBuffer != null) {
                 bufferedImage = imageBuffer.parseUserSkin(bufferedImage);
