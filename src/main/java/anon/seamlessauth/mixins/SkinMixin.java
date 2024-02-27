@@ -17,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.include.com.google.common.base.Objects;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
@@ -102,12 +103,14 @@ public class SkinMixin {
     @Overwrite
     public void func_152790_a(final GameProfile user, final SkinManager.SkinAvailableCallback callback,
         final boolean _secure) {
-        if (user.getId()
-            .equals(
-                Minecraft.getMinecraft()
-                    .getSession()
-                    .func_148256_e()
-                    .getId())
+        if (user.getId() == null) return;
+
+        if (Objects.equal(
+            user.getId(),
+            Minecraft.getMinecraft()
+                .getSession()
+                .func_148256_e()
+                .getId())
             || Minecraft.getMinecraft()
                 .isSingleplayer()) {
 
