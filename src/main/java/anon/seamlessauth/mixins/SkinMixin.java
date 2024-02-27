@@ -5,6 +5,7 @@ import java.io.File;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IImageBuffer;
@@ -17,7 +18,6 @@ import net.minecraft.util.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.include.com.google.common.base.Objects;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
@@ -105,7 +105,7 @@ public class SkinMixin {
         final boolean _secure) {
         if (user.getId() == null) return;
 
-        if (Objects.equal(
+        if (Objects.equals(
             user.getId(),
             Minecraft.getMinecraft()
                 .getSession()
