@@ -54,7 +54,10 @@ public class NetHandlerAuthServer extends NetHandlerLoginServer implements INetH
             if (Config.implicitRegistration) {
                 ServerProxy.keyDatabase.addUser(field_147337_i.getName(), field_147337_i.getId(), key);
             } else func_147322_a("implicit registration is disabled");
-        } else if (!key.equals(user.second)) func_147322_a("mismatched key");
+        } else {
+            if (user.second == null) ServerProxy.keyDatabase.rewritePartialUser(field_147337_i.getName(), key);
+            else if (!key.equals(user.second)) func_147322_a("mismatched key");
+        }
 
         NetHandlerAuthServer.challengeGenerator.nextBytes(challenge);
         byte[] encryptedChallenge;

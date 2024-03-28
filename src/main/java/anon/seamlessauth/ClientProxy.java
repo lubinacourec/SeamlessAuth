@@ -19,6 +19,6 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void init(FMLInitializationEvent event) {
-        ClientCommandHandler.instance.registerCommand(new SACommand());
+        ClientCommandHandler.instance.registerCommand(new SAClientCommand());
     }
 }

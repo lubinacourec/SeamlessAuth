@@ -3,46 +3,39 @@ package anon.seamlessauth;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
-import anon.seamlessauth.skin.ClientSkinHandler;
-import anon.seamlessauth.util.SkinMixinHelper;
-
-public class SACommand extends CommandBase {
+public class SAServerCommand extends CommandBase {
 
     @Override
     public int getRequiredPermissionLevel() {
-        return 0;
+        return 4;
     }
 
     @Override
     public String getCommandName() {
-        return "seamlessauth";
+        return "seamlessauth_server";
     }
 
     @Override
     public String getCommandUsage(ICommandSender sender) {
-        return "/" + getCommandName() + " <reload-skin|requery-all>";
+        return "/" + getCommandName() + " <reload-config|reload-keys>";
     }
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-        IChatComponent usage = new ChatComponentText(EnumChatFormatting.RED + "usage: " + getCommandUsage(sender));
+        IChatComponent usage = new ChatComponentText("usage: " + getCommandUsage(sender));
         if (args.length != 1) {
             sender.addChatMessage(usage);
             return;
         }
 
         switch (args[0]) {
-            case "reload-skin":
+            case "reload-config":
                 Config.synchronizeConfiguration(null);
-                ClientSkinHandler.instance.reload();
-                SkinMixinHelper.loadOwnSkin();
                 break;
-            case "requery-all":
-                ClientSkinHandler.instance.queryCache.keySet()
-                    .forEach(uuid -> ClientSkinHandler.instance.querySkin(uuid, null));
+            case "reload-keys":
+                ServerProxy.keyDatabase.reloadKeys();
                 break;
             default:
                 sender.addChatMessage(usage);
