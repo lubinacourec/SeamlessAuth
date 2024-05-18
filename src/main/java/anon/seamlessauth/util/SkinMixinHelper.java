@@ -62,11 +62,11 @@ public class SkinMixinHelper implements ClientSkinHandler.QueryCallback {
             SkinMixinHelper.profileFromPath(Config.expandPath(Config.skinPath)),
             Type.SKIN,
             ownSkinCallback);
-        else ownSkinCallback.func_152121_a(Type.SKIN, null);
+        else if (ownSkinCallback != null) ownSkinCallback.func_152121_a(Type.SKIN, null);
         if (ClientSkinHandler.instance.capeData != null) manager.func_152789_a(
             SkinMixinHelper.profileFromPath(Config.expandPath(Config.capePath)),
             Type.CAPE,
             ownSkinCallback);
-        else ownSkinCallback.func_152121_a(Type.CAPE, null);
+        else if (ownSkinCallback != null) ownSkinCallback.func_152121_a(Type.CAPE, null);
     }
 }
